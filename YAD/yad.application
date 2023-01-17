@@ -1,0 +1,14 @@
+yad --title=___________ --text="Hello World"
+
+#--window-icon=~/_________ 
+#--width=
+#--image=
+
+
+#--text-align= (L/R/C; fill)
+
+#--color --gtk-palatte
+
+#yad --file --title="Select the image file"
+
+#--
