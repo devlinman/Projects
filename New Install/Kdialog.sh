@@ -19,9 +19,8 @@ fi
 
 kdialog --yesno "Do you want to view the config file?"
 answerOrExit "$?" "kdialog --textbox $(printf %q "$input")" ""
-
-pamacInstall=$(sed -n '/#/d;/pamax {/,/}/{//!p}' Packages.txt)
-pamacRemove=$(sed -n '/#/d;/pamar {/,/}/{//!p}' Packages.txt)
+pamacInstall=$(sed -n '/#/d;/pamax {/,/}/{//!p}' Packages.py)
+pamacRemove=$(sed -n '/#/d;/pamar {/,/}/{//!p}' Packages.py)
 
 Listify () {
     Entries=$@

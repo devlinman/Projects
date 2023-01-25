@@ -1,9 +1,9 @@
-pamacInstall=$(sed -n '/#/d;/pamax {/,/}/{//!p}' Packages.txt)
+pamacInstall=$(sed -n '/#/d;/pamax {/,/}/{//!p}' Packages.py)
 echo -e "\nInstalling:"
 echo $pamacInstall
 # pamac install --no-confirm $pamacInstall
 
-pamacRemove=$(sed -n '/#/d;/pamar {/,/}/{//!p}' Packages.txt)
+pamacRemove=$(sed -n '/#/d;/pamar {/,/}/{//!p}' Packages.py)
 echo -e "\nRemoving:"
 echo $pamacRemove
 # pamac remove --no-confirm $pamacRemove

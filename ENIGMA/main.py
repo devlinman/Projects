@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+# <<<<<<< HEAD
 import os
 if os.path.exists("/media/SAFE/TXTs and MDs/Encoded/output.txt"):
     os.rename("/media/SAFE/TXTs and MDs/Encoded/output.txt", "/media/SAFE/TXTs and MDs/Encoded/output.txt.bak")
@@ -35,21 +35,21 @@ Messages = infile.readlines()
 Map=Mapping()
 for message in Messages:
     print(Encode(message), "\n", file=outfile)
-=======
-import keyboard as kb
-
-# Using readlines()
-file1 = open('code.code', 'r')
-Lines = file1.readlines()
-mapping={}
-for line in Lines:
-    line=line.strip("\n")
-    A = line.split(":")
-    # print(A[0], ">>", A[1])
-    mapping[A[0]] = A[1]
-# print(mapping)
-
-Output=[]
+# =======
+# import keyboard as kb
+#
+# # Using readlines()
+# file1 = open('code.code', 'r')
+# Lines = file1.readlines()
+# mapping={}
+# for line in Lines:
+#     line=line.strip("\n")
+#     A = line.split(":")
+#     # print(A[0], ">>", A[1])
+#     mapping[A[0]] = A[1]
+# # print(mapping)
+#
+# Output=[]
 #
 # # One-Time && Terminal
 # message=input("Enter your Message:")
@@ -60,20 +60,20 @@ Output=[]
 # print(''.join(Output))
 #
 
-# kb.read_key()
-# kb.is_pressed()
-
-message=kb.get_typed_strings(kb.record(until='escape'))
-print(message)
-
-# message=input("Enter your Message:")
-for word in message:
-    words=[]
-    Msg=list(word.replace(" ",""))
-    for char in word:
-        if char != " ":
-            words.append(mapping[char])
-    word = ''.join(words)
-    Output.append(word)
-print(Output)
->>>>>>> parent of 5b36bf9 (Sun Oct 16 04:54:20 AM IST 2022)
+# # kb.read_key()
+# # kb.is_pressed()
+#
+# message=kb.get_typed_strings(kb.record(until='escape'))
+# print(message)
+#
+# # message=input("Enter your Message:")
+# for word in message:
+#     words=[]
+#     Msg=list(word.replace(" ",""))
+#     for char in word:
+#         if char != " ":
+#             words.append(mapping[char])
+#     word = ''.join(words)
+#     Output.append(word)
+# print(Output)
+# # >>>>>>> parent of 5b36bf9 (Sun Oct 16 04:54:20 AM IST 2022)

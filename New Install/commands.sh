@@ -29,7 +29,7 @@ sudo cat /etc/fstab
 echo -e "\n"
 sudo systemctl daemon-reload
 sudo mkdir -p /media/DATA
-sudo mkdir /media/WINDOWS /media/SAFE
+sudo mkdir /media/WINDOWS /media/SAFE /media/STORM
 sudo chown -R devlinman /media && sudo chgrp -R devlinman /media
 sudo umount /dev/sda1
 sudo mount -a
@@ -98,6 +98,13 @@ echo "Applications Folder Linked to ~"
 ln -s "/media/DATA/SOFTWARE/Linux/Applications" "/home/devlinman/Test/Applications"
 
 ####################################
+
+# # # # # ADDING SHUTDOWN SCRIPT
+
+# sudo echo "devlinman ALL=(ALL) NOPASSWD: /sbin/shutdown" >> /etc/sudoers
+
+
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # yet to do:
 # Add konsave to apply customizations

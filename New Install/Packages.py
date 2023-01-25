@@ -3,7 +3,7 @@ pamar {
     vi
     matray
     yakuake
-    timeshift
+    # timeshift
     vlc
 }
 
@@ -22,7 +22,6 @@ pamax {
     google-chrome
     latte-dock
     gtk3-nocsd-git
-    # konsave
     xsel
     # strawberry-qt5
     plasma5-applets-window-title
@@ -37,11 +36,12 @@ pamax {
     i8kutils
     # brave-bin
     haruna
-    tagspaces-bin
+    # tagspaces-bin
     # ShareX
     # Ghostwriter
-    github-desktop-bin
-    #whatsapp-for-linux
+    # github-desktop-bin
+    # whatsapp-for-linux
     activitywatch-bin
     # signal-desktop
+    # img2pdf
 }
