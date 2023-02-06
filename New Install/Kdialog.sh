@@ -6,7 +6,7 @@ function answerOrExit () {
 }
 
 kdialog --msgbox "Hello there! Let's Install some packages!"
-input=Packages.txt
+input=Packages.py
 # input=Not_Packages.txt
 
 if [ ! -f $input ]; then
@@ -19,15 +19,28 @@ fi
 
 kdialog --yesno "Do you want to view the config file?"
 answerOrExit "$?" "kdialog --textbox $(printf %q "$input")" ""
-pamacInstall=$(sed -n '/#/d;/pamax {/,/}/{//!p}' Packages.py)
-pamacRemove=$(sed -n '/#/d;/pamar {/,/}/{//!p}' Packages.py)
+# pamacInstall=$(sed -n '/#/d;/pamax {/,/}/{//!p}' Packages.py)
+pamacInstall=$(sed -n '/pamax {/,/}/{//!p}' Packages.py)
+# pamacRemove=$(sed -n '/#/d;/pamar {/,/}/{//!p}' Packages.py)
+pamacRemove=$(sed -n '/pamar {/,/}/{//!p}' Packages.py)
 
 Listify () {
-    Entries=$@
-    entryArray=($Entries)
+    inputString=$@
+#     Entries=$(echo $inputString | sed 's/#//g')
+#     entryArray=($Entries)
+    entryArray=($inputString)
     for i in ${!entryArray[@]}
     do
-        ans=$ans' '$(($i+1))' '\"${entryArray[$i]}\"' 'off
+        if [[ ${entryArray[$i]} == "#" ]];
+        then
+            continue
+        fi
+        if [[ ${entryArray[$i-1]} == "#" ]];
+        then
+            ans=$ans' '$(($i+1))' '${entryArray[$i]}' 'on
+        else
+            ans=$ans' '$(($i+1))' '${entryArray[$i]}' 'off
+        fi
     done
     echo $ans
 }

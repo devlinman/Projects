@@ -1,10 +1,12 @@
 ## pamac remove
+### Enable AUR support for Pamac firtst!!
+
 pamar {
     vi
     matray
     yakuake
     # timeshift
-    vlc
+    #vlc
 }
 
 ## pamac install
@@ -16,8 +18,8 @@ pamax {
     # applet-window-buttons-git
     ttf-jetbrains-mono
     gparted
-    lightly-qt
-    lightlyshaders-git
+    # lightly-qt
+    # lightlyshaders-git
     veracrypt
     google-chrome
     latte-dock
@@ -25,12 +27,13 @@ pamax {
     xsel
     # strawberry-qt5
     plasma5-applets-window-title
+    plasma5-applets-window-buttons
     vim
     pavucontrol
     ocenaudio-bin
     # gnome-keyring
     konsave
-    # cider-bin
+    # cider
     simplescreenrecorder
     appimagelauncher
     i8kutils
@@ -38,10 +41,14 @@ pamax {
     haruna
     # tagspaces-bin
     # ShareX
-    # Ghostwriter
-    # github-desktop-bin
-    # whatsapp-for-linux
+    # ghostwriter
+    # github-desktop
+    whatsapp-for-linux
     activitywatch-bin
-    # signal-desktop
-    # img2pdf
+    signal-desktop
+    img2pdf
+    kdialog
+    # lyx
+    telegram-desktop
+    clipgrab
 }

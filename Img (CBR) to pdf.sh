@@ -2,26 +2,48 @@
 
 if [ ! -d "../PDF" ]; then
     mkdir "../PDF"
+elif [[ $1 == 'f' ]]; then
+    echo Override Accepted!
+else
+    echo "A 'PDF' folder already exists in parent directory. Add 'f' as argument to override!"
+    exit
 fi
 
-for f in *; do
-    if [ -d "$f" ]; then
-        count_JP=`ls -1 $f/*.jp* 2>/dev/null | wc -l`
-        count_PNG=`ls -1 $f/*.png 2>/dev/null | wc -l`
-        if [ $count_JP != 0 ]; then
-            img2pdf ./"$f"/*.jp* --output ../PDF/"$f".pdf
-            echo -e "JPG/JPEG:\tDIR = $f \t Completed"
-        elif [ $count_PNG != 0 ]; then
-            img2pdf ./"$f"/*.png --output ../PDF/"$f".pdf
-            echo -e "PNG:\tDIR = $f \t Completed"
+OIFS="$IFS"
+IFS=$'\n'
+
+for dir in $(find * -maxdepth 0 -type d); do
+    count_JP=`ls -1 $dir/*.jp* 2>/dev/null | wc -l`
+    count_PNG=`ls -1 $dir/*.png 2>/dev/null | wc -l`
+    if [[ $count_JP != 0 && $count_PNG != 0 ]]; then
+        echo -e "\nSomething is wrong!!!\nCheck $dir\nJPG=$count_JP\tPNG=$count_PNG\nno. of sub-directories in $dir=$(find $dir/* -maxdepth 0 -type d | wc -l)"
+        echo -e "\nDiagnosis:\tBOTH JPG and PNG files exist in \" $dir \""
+        break
+    elif [[ $count_JP != 0 && $count_PNG == 0 ]]; then
+#            img2pdf ./"$f"/*.jp* --output ../PDF/"$f".pdf
+        find ./$dir/ -name '*.jp*' -print0 | sort -z -V | xargs -0r img2pdf -s 1080x2400 --fit into -o ../PDF/"$dir".pdf
+#         find ./$dir/ -name '*.jp*' -print0 | sort -z -V | xargs -0r img2pdf -o ../PDF/"$dir".pdf
+        echo -e "JPG/JPEG:\tDIR = $dir \t Completed"
+    elif [[ $count_PNG != 0 && $count_JP == 0 ]]; then
+#            img2pdf ./"$f"/*.png --output ../PDF/"$f".pdf
+        find ./$dir/ -name '*.png' -print0 | sort -z -V | xargs -0r img2pdf -s 1080x2400 --fit into -o ../PDF/"$dir".pdf
+#         find ./$dir/ -name '*.png' -print0 | sort -z -V | xargs -0r img2pdf -o ../PDF/"$dir".pdf
+        echo -e "PNG:\tDIR = $dir \t Completed"
+    else
+        echo -e "The directory \" $dir \" is empty!\nYou may need to check the name of directory. '[]' is not allowed."
+        if [[ $1 == 'F' ]]; then
+            echo -e "\nLoop override set! Proceeding to next directory!"
         else
-            echo -e "Something is wrong!!!\nCheck $f"
+            echo set '$1'=F to Override Loop!
             break
         fi
     fi
+    echo -e "No. of JPG/JPEG files\t$count_JP\nNo. of PNG files\t$count_PNG\n"
 done
 
-echo -e "No. of JPG/JPEG files\t$count_JP\nNo. of PNG files\t$count_PNG\n"
+IFS="$OIFS"
+# img2pdf ./*.jpg -s 1080x2400 --fit into -o out.pdf
+# --rotation=ifvalid
 
 ########################### README ########################
 # Dependencies:
@@ -65,10 +87,10 @@ echo -e "No. of JPG/JPEG files\t$count_JP\nNo. of PNG files\t$count_PNG\n"
 
 # Known Edge Cases:
 #   |> If the one or more folders contain JPGs ond PNGs together.
+#   |> Names of the folders must be free of [] square brackets. Why? I don't know...
+#   |> Fortunately, it leaves the previously exiting ../PDF folder and its contents intact if there are no file conflicts...
 
 # Improvements to be expected:
-#   |> If a folder contains JPGs and PNGs mixed together: Throw Error.
-#     Implementation: A simple check to see if both $count_JP and $count_PNG are non-zero at the same time.
 #   |> Ability to extract .CB* ( .CBR, .CBZ, .CBT ) files and then create pdfs
 #   |> Support for more file formats
 #   |> Ability to handle Arguments ($PWD, etc.,) and Options both in command-line and in GUI

@@ -8,18 +8,23 @@ echo -e "\nRemoving:"
 echo $pamacRemove
 # pamac remove --no-confirm $pamacRemove
 
-if [[ $1 == "I" ]];
+if [[ $1 == "InstallOnly" ]];
 then
     echo -e "\n\tOnly Install Packages!\n"
     pamac install --no-confirm $pamacInstall
+#     yay -S $pamacInstall
 
-elif [[ $1 == "R" ]];
+elif [[ $1 == "RemoveOnly" ]];
 then
     echo -e "\n\tOnly Remove Packages!\n"
     pamac remove --no-confirm $pamacRemove
 
-elif [[ $1 == "T" ]];
+elif [[ $1 == "Test" ]];
 then
+    pamacInstall=$(sed -n '/#/d;/pamax {/,/}/{//!p}' testPackages.py)
+    pamacRemove=$(sed -n '/#/d;/pamar {/,/}/{//!p}' testPackages.py)
+    echo $pamacInstall
+    echo $pamacRemove
     echo -e "\n\tTHIS IS A TEST!\n\n\tTesting....\n\n\texit()"
     exit
 

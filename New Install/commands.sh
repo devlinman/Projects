@@ -2,113 +2,108 @@
 
 set -e
 # Trap “Error at $LINENOE’ ERR
-
-
 #############
-
-
-if [[ $1 == "T" ]] || [[ $1 == "I" ]] || [[ $1 == "R" ]];
+if [[ $2 == "Test" || $2 == "InstallOnly" || $2 == "RemoveOnly" ]] && [[ $1 == "installScript" ]];
 then
-    ./Install\ Script.sh $1
+    ./Install\ Script.sh $2
     exit
 fi
-
 # sudo pacman-mirrors -g && sudo pacman -Syy
+# sudo pacman -Syyu
 
-sudo pacman -Syyu
-
-./Install\ Script.sh $1
-
+if [[ $1 != "noInstallScript" ]];
+then
+    echo "Unrecogonized arguments. Please Check!!"
+    exit
+fi
+echo Proceeding with no install script. Hope you have all the packages installed!
 ##############
 
-# # Mounting Drives:
+# USE SUDO BEFORE!!
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
 
+# # Mounting Drives:
+echo Mounting /dev/sda1...
 sudo cat /run/media/devlinman/DATA/SOFTWARE/Programming/Configs/FSTAB/fstab >> /etc/fstab
 echo -e "\n\tFSTAB CONFIG UPDATED!"
-sudo cat /etc/fstab
+cat /etc/fstab
 echo -e "\n"
-sudo systemctl daemon-reload
-sudo mkdir -p /media/DATA
-sudo mkdir /media/WINDOWS /media/SAFE /media/STORM
-sudo chown -R devlinman /media && sudo chgrp -R devlinman /media
-sudo umount /dev/sda1
-sudo mount -a
+systemctl daemon-reload
+mkdir -p /media/DATA
+mkdir /media/WINDOWS /media/SAFE /media/STORM
+chown -R devlinman /media && sudo chgrp -R devlinman /media
+umount /dev/sda1
+mount -a
+echo Mounted /dev/sda1 @ /media/DATA
 
-sudo gpasswd -a $USER input
-
+gpasswd -a $USER input
 # copy grub config and theme
-sudo cp /media/DATA/SOFTWARE/Programming/Configs/GRUB/grub /etc/default/grub
+cp /media/DATA/SOFTWARE/Programming/Configs/GRUB/grub /etc/default/grub
+echo Copying Grub config and theme...
 
-# mv /usr/share/grub/themes/manjaro /usr/share/grub/themes/manjaro.bak          # Backup GRUB THEME
+mv /usr/share/grub/themes/manjaro /usr/share/grub/themes/manjaro.bak          # Backup GRUB THEME
 
-sudo cp -r /media/DATA/SOFTWARE/Programming/Configs/GRUB/manjaro /usr/share/grub/themes
+cp -r /media/DATA/SOFTWARE/Programming/Configs/GRUB/manjaro /usr/share/grub/themes
 
-sudo update-grub
+
+# sudo pacman -S git base-devel
+
+# git clone https://aur.archlinux.org/update-grub.git
+
+# yay -S update-grub
+
+
+# sudo pacman -S git base-devel
+update-grub
 
 systemctl disable systemd-networkd-wait-online.service
 
 ###############################
 
 ###############################
+# *
+# cp /media/DATA/SOFTWARE/Programming/Configs/LIBINPUT\ GESTURES/libinput-gestures.conf /home/devlinman/.config/libinput-gestures.conf
+# echo -e "Copied libinput-gestures config\nDont forget to autostart libinput-gestures!"
+# libinput-gestures-setup autostart               # Must have LIBINPUT-Gestures Installed!
 
-# copy libinput config and Autostart:
+# *
+# cp -r /media/DATA/SOFTWARE/Programming/Configs/NEOFETCH/neofetch/ /home/devlinman/.config/
+# echo Copied neofetch configs.
 
-cp /media/DATA/SOFTWARE/Programming/Configs/LIBINPUT\ GESTURES/libinput-gestures.conf /home/devlinman/.config/libinput-gestures.conf
-
-libinput-gestures-setup autostart               # Must have LIBINPUT-Gestures Installed!
-
-# copy nefetch config:
-
-cp -r /media/DATA/SOFTWARE/Programming/Configs/NEOFETCH/neofetch/ /home/devlinman/.config/
-
-# copy vimrc:
-
-cp /media/DATA/SOFTWARE/Programming/Configs/Vim/vimrc /home/devlinman/.vimrc
-
-# copy zshrc:
-
-cp /media/DATA/SOFTWARE/Programming/Configs/ZSH/zshrc /home/devlinman/.zshrc
-
+# *
+# cp /media/DATA/SOFTWARE/Programming/Configs/Vim/vimrc /home/devlinman/.vimrc
+# echo copied vimrc.
+# *
+# cp /media/DATA/SOFTWARE/Programming/Configs/ZSH/zshrc /home/devlinman/.zshrc
+# echo copied zshrc.
 # sudo restart now
-
-zsh                 # Reload terminal
-
-
+# zsh                 # Reload terminal
 ##################################
 # # PACMAN Config
-
-sudo sed -i -e 's/#ParallelDownloads = 5/ParallelDownloads = 10/g' -e 's/#Color/Color/g' -e 's/#VerbosePkgLists/VerbosePkgLists/g' /etc/pacman.conf
-
-sudo echo "ILoveCandy" >> /etc/pacman.conf
-
-
+sed -i -e 's/#ParallelDownloads = 5/ParallelDownloads = 10/g' -e 's/#Color/Color\nILoveCandy/g' -e 's/#VerbosePkgLists/VerbosePkgLists/g' /etc/pacman.conf
 ###################################
-
 # # # # # # # # # LINKING DIRECTORIES
-
 Arr=("Desktop" "Documents" "Downloads" "Music" "Pictures" "Videos" "Telegram Desktop")
-
 for key in "${Arr[@]}"
 do
-    ln -s "/media/DATA/$key" "/home/devlinman/Test/$key"
+    rm -Rf "/home/devlinman/$key"
+    ln -s "/media/DATA/$key" "/home/devlinman/$key"
     echo -e "/media/DATA/$key\t" ">>\t" "/home/devlinman/$key"
 done
-
+ln -s "/media/DATA/SOFTWARE/Linux/Applications" "/home/devlinman/Applications"
 echo "Applications Folder Linked to ~"
-ln -s "/media/DATA/SOFTWARE/Linux/Applications" "/home/devlinman/Test/Applications"
-
 ####################################
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # ADDING SHUTDOWN SCRIPT
 
 # sudo echo "devlinman ALL=(ALL) NOPASSWD: /sbin/shutdown" >> /etc/sudoers
 
-
-
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # yet to do:
-# Add konsave to apply customizations
-# custom shortcuts
 
 # extra
 # add favorite applications to kickoff menu
@@ -117,9 +112,10 @@ ln -s "/media/DATA/SOFTWARE/Linux/Applications" "/home/devlinman/Test/Applicatio
 # Help
 # commandline arguments: I R T
 
-# # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # #
+# New Bug: SDDM config...
+chown -R sddm:sddm /var/lib/sddm/.config
 
-# # Configure Terminal Prompt
-p10k configure
-
-# Copy config to p10k
+pamac install konsave
+konsave -i Konsave.knsv
+konsave -a Konsave
